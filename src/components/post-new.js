@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
+import { createPost } from '../actions/index';
 
 class PostsNew extends Component {
   render() {
     const { fields: { title, categories, content }, handleSubmit } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(this.props.createPost)}>
 
         <h3>Create A New Post</h3>
         
@@ -40,7 +41,26 @@ class PostsNew extends Component {
   }
 }
 
+function validate(values) {
+	const errors = {};
+	if (!values.title) {
+		errors.title = 'Enter a username';
+	}
+	if (!values.categories) {
+    	errors.categories = 'Enter categories';
+  	}
+  	if(!values.content) {
+    	errors.content = 'Enter some content';
+  	}
+	return errors;
+}
+
 export default reduxForm({
   form: 'PostsNewForm',
   fields: ['title', 'categories', 'content'],
-})(PostsNew);
+  validate
+}, null, {createPost})(PostsNew);
+
+
+
+
